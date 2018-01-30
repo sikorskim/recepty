@@ -1,0 +1,1 @@
+wiêkszoœæ  funkcji jest zaimplementowana w klasach, ale nie jest pod³¹æzona do GUI
