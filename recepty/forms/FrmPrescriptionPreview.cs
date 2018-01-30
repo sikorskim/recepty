@@ -12,14 +12,18 @@ namespace recepty
 {
     public partial class FrmPrescriptionPreview : Form
     {
-        public FrmPrescriptionPreview()
+        public FrmPrescriptionPreview(Prescription prescription)
         {
             InitializeComponent();
+            this.prescription = prescription;
+            prescription = Prescription.get(prescription);
         }
+
+        Prescription prescription;
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-            Prescription.drawPrescriptionTemplate(e);
+            prescription.preview(e);
         }
     }
 }

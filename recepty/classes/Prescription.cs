@@ -55,7 +55,7 @@ namespace recepty
             return model.Prescription.ToList();
         }
 
-        public static List<ReceptyView> getList(Patient patient)
+        public static List<ReceptyView> getViewList(Patient patient)
         {
             Model1 model = new Model1();
             var items = model.Prescription.Where(p => p.PatientId == patient.PatientId).ToList();
@@ -63,7 +63,7 @@ namespace recepty
             foreach (Prescription pres in items)
             {
                 string number = model.PrescriptionNumber.Single(p => p.PrescriptionNumberId == pres.PrescriptionNumberId).Number;
-                result.Add(new ReceptyView(pres.PrescriptionId, pres.DateOfIssue, number,pres.Doctor.FullName));
+                result.Add(new ReceptyView(pres.PrescriptionId, pres.DateOfIssue, number, pres.Doctor.FullName));
             }
             return result;
         }
@@ -91,10 +91,26 @@ namespace recepty
             return true;
         }
 
-        //public static void drawPrescriptionTemplate(System.Drawing.Printing.PrintPageEventArgs e)
-        public static void drawPrescriptionTemplate(PaintEventArgs e)
+        Image drawCode(string value)
+        {
+            Code128BarcodeDraw code = BarcodeDrawFactory.Code128WithChecksum;
+            Image img = code.Draw(value, 40);
+            return img;
+        }
+
+        public void print(System.Drawing.Printing.PrintPageEventArgs e)
         {
             Graphics g = e.Graphics;
+            drawPrescriptionTemplate(g);
+        }
+        public void preview(PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            drawPrescriptionTemplate(g);
+        }
+
+        void drawPrescriptionTemplate(Graphics g)
+        {
             g.PageUnit = GraphicsUnit.Millimeter;
             float lineSize = 0.2f;
             Pen p = new Pen(Color.Black, lineSize);
@@ -145,23 +161,39 @@ namespace recepty
             Font fontDefault = new Font("Arial", 10);
             Font fontSmall = new Font("Arial", 8);
             Brush brush = Brushes.Black;
+
             Point ptReceptaStr = new Point(marginLeft, marginTop);
+            Point ptReceptaVal = new Point(marginLeft + 30, marginTop);
             Point ptSwiadczeniodawcaStr = new Point(marginLeft, 30);
             Point ptPacjentStr = new Point(marginLeft, 35);
+            Point ptPacjentFullNameVal = new Point(marginLeft, 40);
+            Point ptPatientFullAddressVal = new Point(marginLeft, 45);
             Point ptPeselStr = new Point(marginLeft, 69);
+            Point ptPeselVal = new Point(marginLeft + 20, 69);
             Point ptNfzStr = new Point(72, 35);
+            Point ptNfzVal = new Point(72, 40);
             Point ptUprawnieniaStr = new Point(72, 55);
+            Point ptUprawnieniaVal = new Point(72, 60);
             Point ptRpStr = new Point(marginLeft, 75);
             Point ptDataWystawieniaStr = new Point(marginLeft, 160);
+            Point ptDataWystawieniaVal = new Point(marginLeft, 165);
             Point ptDataRealizacjiStr = new Point(marginLeft, 180);
+
             g.DrawString("Recepta", fontDefault, brush, ptReceptaStr);
+            g.DrawString(PrescriptionNumber.Number, fontDefault, brush, ptReceptaVal);
             g.DrawString("Świadczeniodawca", fontDefault, brush, ptSwiadczeniodawcaStr);
             g.DrawString("Pacjent", fontDefault, brush, ptPacjentStr);
+            g.DrawString(Patient.FullName, fontDefault, brush, ptPacjentFullNameVal);
+            // g.DrawString(Patient.FullAddress, fontDefault, brush, ptPatientFullAddressVal);
             g.DrawString("R.p.", fontDefault, brush, ptRpStr);
             g.DrawString("PESEL", fontDefault, brush, ptPeselStr);
+            g.DrawString(Patient.PESEL, fontDefault, brush, ptPeselVal);
             g.DrawString("Oddział NFZ", fontDefault, brush, ptNfzStr);
+            g.DrawString(Patient.Kod, fontDefault, brush, ptNfzVal);
             g.DrawString("Uprawnienia \ndodatkowe", fontDefault, brush, ptUprawnieniaStr);
+            g.DrawString(Patient.Uprawnienie, fontDefault, brush, ptUprawnieniaVal);
             g.DrawString("Data wystawienia", fontSmall, brush, ptDataWystawieniaStr);
+            g.DrawString(DateOfIssue.ToShortDateString(), fontDefault, brush, ptDataWystawieniaVal);
             g.DrawString("Data realizacji 'od dnia'", fontSmall, brush, ptDataRealizacjiStr);
         }
     }

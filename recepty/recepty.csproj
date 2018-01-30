@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="classes\Diagnostics.cs" />
+    <Compile Include="classes\DrugView.cs" />
     <Compile Include="classes\PrescriptionItem.cs" />
     <Compile Include="classes\ReceptyView.cs" />
     <Compile Include="classes\Uprawnienia.cs" />

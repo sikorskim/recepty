@@ -148,6 +148,62 @@ namespace recepty
             return result.ToList();
         }
 
+        public static List<DrugView> searchViewList(string query, string queryType, string filter)
+        {
+            Model1 model = new Model1();
+            IQueryable<Lek> result = model.Lek;
+
+            if (filter == "psychotrop")
+            {
+                result = result.Where(p => p.Psychotrop);
+            }
+            else if (filter == "szczepionka")
+            {
+                result = result.Where(p => p.Szczepionka);
+            }
+            else if (filter == "senior")
+            {
+                result = result.Where(p => p.Senior);
+            }
+
+            if (queryType == "nazwa")
+            {
+                result = result.Where(p => p.Nazwa.Contains(query));
+            }
+            else if (queryType == "nazwaInt")
+            {
+                result = result.Where(p => p.NazwaInt.Contains(query));
+            }
+            else if (queryType == "EAN")
+            {
+                result = result.Where(p => p.EAN.Contains(query));
+            }
+            else if (queryType == "BL7")
+            {
+                result = result.Where(p => p.BL7.Contains(query));
+            }
+
+            List<DrugView> searchResult = new List<DrugView>();
+            foreach (Lek drug in result)
+            {
+                searchResult.Add(new DrugView(drug));
+            }
+
+            return searchResult;
+        }
+
+        public static List<DrugView> getViewList()
+        {
+            Model1 model = new Model1();
+            var items = model.Lek.Where(p => p.Active).ToList();
+            List<DrugView> result = new List<DrugView>();
+            foreach (Lek drug in items)
+            {
+                result.Add(new DrugView(drug));
+            }
+            return result;
+        }
+
         public static List<Lek> getAll()
         {
             Model1 model = new Model1();

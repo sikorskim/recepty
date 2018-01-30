@@ -55,7 +55,8 @@ namespace recepty
             {
                 string queryType = comboBox2.SelectedValue.ToString();
                 string filter = comboBox3.SelectedValue.ToString();
-                dataGridView1.DataSource = Lek.search(query, queryType, filter);
+                //dataGridView1.DataSource = Lek.search(query, queryType, filter);
+                dataGridView1.DataSource = Lek.searchViewList(query, queryType, filter);
             }
         }
 
@@ -113,6 +114,16 @@ namespace recepty
             Prescription prescription = new Prescription(PrescriptionNumber.getUnusedNumber("Rp"), patient, doctor, list);
             FrmPrescriptionPrint prescriptionPrint = new FrmPrescriptionPrint(prescription);
             prescriptionPrint.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Model1 model = new Model1();
+            Doctor doctor = model.Doctor.FirstOrDefault();
+
+            Prescription prescription = new Prescription(PrescriptionNumber.getUnusedNumber("Rp"), patient, doctor, list);
+            FrmPrescriptionPreview frmPrescriptionPreview = new FrmPrescriptionPreview(prescription);
+            frmPrescriptionPreview.Show();
         }
     }
 }

@@ -237,7 +237,7 @@
             // 
             this.wyświetlListęLekówToolStripMenuItem.Name = "wyświetlListęLekówToolStripMenuItem";
             this.wyświetlListęLekówToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.wyświetlListęLekówToolStripMenuItem.Text = "Wyświetl listę leków";
+            this.wyświetlListęLekówToolStripMenuItem.Text = "Baza leków";
             this.wyświetlListęLekówToolStripMenuItem.Click += new System.EventHandler(this.wyświetlListęLekówToolStripMenuItem_Click);
             // 
             // wyświetlNumeryReceptToolStripMenuItem
@@ -314,7 +314,7 @@
             this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(23, 33);
-            this.toolStripButton5.Text = "Zmień";
+            this.toolStripButton5.Text = "Usuń";
             // 
             // toolStripSeparator2
             // 
@@ -346,6 +346,8 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(567, 345);
             this.tabControl1.TabIndex = 3;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabControl1.TabIndexChanged += new System.EventHandler(this.tabControl1_TabIndexChanged);
             // 
             // tabPage1
             // 
@@ -484,6 +486,7 @@
             this.dataGridView4.Name = "dataGridView4";
             this.dataGridView4.Size = new System.Drawing.Size(553, 280);
             this.dataGridView4.TabIndex = 1;
+            this.dataGridView4.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView4_CellContentClick);
             // 
             // toolStripMenuItem1
             // 
@@ -546,6 +549,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(101, 21);
             this.comboBox1.TabIndex = 1;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -563,6 +567,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(80, 21);
             this.comboBox2.TabIndex = 3;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // textBox2
             // 
@@ -570,6 +575,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(238, 20);
             this.textBox2.TabIndex = 4;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // FrmMain
             // 

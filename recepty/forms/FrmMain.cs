@@ -189,8 +189,8 @@ namespace recepty
 
         private void getDrugsList()
         {
-            tabControl1.SelectedTab = tabPage3;
-            dataGridView3.DataSource = Lek.getAll();
+            tabControl1.SelectedTab = tabPage4;
+            dataGridView4.DataSource = Lek.getAll();
         }
 
         private void wyświetlNumeryReceptToolStripMenuItem_Click(object sender, EventArgs e)
@@ -309,13 +309,65 @@ namespace recepty
 
         private void sToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmPrescriptionPreview frmPrescriptionPreview = new FrmPrescriptionPreview();
-            frmPrescriptionPreview.Show();
+            //FrmPrescriptionPreview frmPrescriptionPreview = new FrmPrescriptionPreview();
+            //frmPrescriptionPreview.Show();
         }
 
         private void narzędziaToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void dataGridView4_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void tabControl1_TabIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        void loadDrugFilters()
+        {
+            comboBox1.DataSource = Lek.getSearchQueryTypes();
+            comboBox2.DataSource = Lek.getSearchFilters();
+            comboBox1.SelectedIndex = 0;
+            comboBox1.SelectedIndex = 0;
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == tabPage4)
+            {
+                loadDrugFilters();
+            }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            drugSearch();
+        }
+
+        private void drugSearch()
+        {
+            string query = textBox2.Text;
+            if (query != null && comboBox2.SelectedValue != null)
+            {
+                string queryType = comboBox1.SelectedValue.ToString();
+                string filter = comboBox2.SelectedValue.ToString();
+                dataGridView4.DataSource = Lek.search(query, queryType, filter);
+            }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            drugSearch();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            drugSearch();
         }
     }
 }

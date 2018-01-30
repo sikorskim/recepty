@@ -29,7 +29,8 @@ namespace recepty
         [ForeignKey("Kod")]
         public virtual OddzialNFZ NFZDepartament { get; private set; }
         public string Uprawnienie { get; private set; }
-        public virtual string FullName { get { return Name + " " + Lastname; } }
+        public virtual string FullName { get { return getFullName(); } }
+        public virtual string FullAddress { get { return getFullAddress(); } }
 
         public Patient()
         { }
@@ -156,6 +157,16 @@ namespace recepty
                 lista = model.Patient.Where(p => p.PESEL.Contains(query)).ToList();
             }
             return lista;
+        }
+
+        string getFullName()
+        {
+            return Name + " " + Lastname;
+        }
+
+        string getFullAddress()
+        {
+            return Address.FullAddress;
         }
     }
 }

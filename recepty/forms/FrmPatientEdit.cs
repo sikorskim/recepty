@@ -68,7 +68,7 @@ namespace recepty
             comboBox1.SelectedItem = patient.NFZDepartament;
             comboBox2.SelectedText = patient.Uprawnienie;
 
-            dataGridView1.DataSource = Prescription.getList(patient);
+            dataGridView1.DataSource = Prescription.getViewList(patient);
             dataGridView1.Columns[0].Visible = false;
         }
 
