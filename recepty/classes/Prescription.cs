@@ -55,15 +55,15 @@ namespace recepty
             return model.Prescription.ToList();
         }
 
-        public static List<ReceptyView> getViewList(Patient patient)
+        public static List<PrescriptionView> getViewList(Patient patient)
         {
             Model1 model = new Model1();
             var items = model.Prescription.Where(p => p.PatientId == patient.PatientId).ToList();
-            List<ReceptyView> result = new List<ReceptyView>();
+            List<PrescriptionView> result = new List<PrescriptionView>();
             foreach (Prescription pres in items)
             {
                 string number = model.PrescriptionNumber.Single(p => p.PrescriptionNumberId == pres.PrescriptionNumberId).Number;
-                result.Add(new ReceptyView(pres.PrescriptionId, pres.DateOfIssue, number, pres.Doctor.FullName));
+                result.Add(new PrescriptionView(pres.PrescriptionId, pres.DateOfIssue, number, pres.Doctor.FullName));
             }
             return result;
         }
@@ -91,10 +91,10 @@ namespace recepty
             return true;
         }
 
-        Image drawCode(string value)
+        Image drawBarcode(string value)
         {
             Code128BarcodeDraw code = BarcodeDrawFactory.Code128WithChecksum;
-            Image img = code.Draw(value, 40);
+            Image img = code.Draw(value, 20);
             return img;
         }
 
@@ -140,8 +140,29 @@ namespace recepty
             g.DrawLine(p, vLine00, vLine01);
 
             Point vLine10 = new Point(69, 74);
-            Point vLine11 = new Point(69, 160);
+            Point vLine11 = new Point(69, 148);
             g.DrawLine(penDotted, vLine10, vLine11);
+
+            Point hLine60 = new Point(0, 79);
+            Point hLine61 = new Point(99, 79);
+            g.DrawLine(penDotted, hLine60, hLine61);
+
+            Point hLine70 = new Point(0, 93);
+            Point hLine71 = new Point(99, 93);
+            g.DrawLine(penDotted, hLine70, hLine71);
+            Point hLine80 = new Point(0, 107);
+            Point hLine81 = new Point(99, 107);
+            g.DrawLine(penDotted, hLine80, hLine81);
+            Point hLine90 = new Point(0, 121);
+            Point hLine91 = new Point(99, 121);
+            g.DrawLine(penDotted, hLine90, hLine91);
+            Point hLine100 = new Point(0, 135);
+            Point hLine101 = new Point(99, 135);
+            g.DrawLine(penDotted, hLine100, hLine101);
+
+            Point hLine50 = new Point(0, 148);
+            Point hLine51 = new Point(99, 148);
+            g.DrawLine(penDotted, hLine50, hLine51);
 
             Point hLine30 = new Point(69, 55);
             Point hLine31 = new Point(99, 55);
@@ -164,6 +185,7 @@ namespace recepty
 
             Point ptReceptaStr = new Point(marginLeft, marginTop);
             Point ptReceptaVal = new Point(marginLeft + 30, marginTop);
+            Point ptReceptaVal2 = new Point(30, 155);
             Point ptSwiadczeniodawcaStr = new Point(marginLeft, 30);
             Point ptPacjentStr = new Point(marginLeft, 35);
             Point ptPacjentFullNameVal = new Point(marginLeft, 40);
@@ -173,7 +195,7 @@ namespace recepty
             Point ptNfzStr = new Point(72, 35);
             Point ptNfzVal = new Point(72, 40);
             Point ptUprawnieniaStr = new Point(72, 55);
-            Point ptUprawnieniaVal = new Point(72, 60);
+            Point ptUprawnieniaVal = new Point(72, 65);
             Point ptRpStr = new Point(marginLeft, 75);
             Point ptDataWystawieniaStr = new Point(marginLeft, 160);
             Point ptDataWystawieniaVal = new Point(marginLeft, 165);
@@ -192,9 +214,15 @@ namespace recepty
             g.DrawString(Patient.Kod, fontDefault, brush, ptNfzVal);
             g.DrawString("Uprawnienia \ndodatkowe", fontDefault, brush, ptUprawnieniaStr);
             g.DrawString(Patient.Uprawnienie, fontDefault, brush, ptUprawnieniaVal);
+            g.DrawString(PrescriptionNumber.Number, fontDefault, brush, ptReceptaVal2);
             g.DrawString("Data wystawienia", fontSmall, brush, ptDataWystawieniaStr);
             g.DrawString(DateOfIssue.ToShortDateString(), fontDefault, brush, ptDataWystawieniaVal);
             g.DrawString("Data realizacji 'od dnia'", fontSmall, brush, ptDataRealizacjiStr);
+
+            Point ptBarcodePrescriptionNumber = new Point(27, 150);
+
+            Image imgPrescriptionNumberBarcode = drawBarcode(PrescriptionNumber.Number);
+            g.DrawImage(imgPrescriptionNumberBarcode, ptBarcodePrescriptionNumber);
         }
     }
 }

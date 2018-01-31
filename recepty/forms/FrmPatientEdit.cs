@@ -21,6 +21,7 @@ namespace recepty
 
         int patientId;
         Patient patient;
+        ErrorProvider errorProvider1 = new ErrorProvider();
 
         void startup()
         {
@@ -32,11 +33,14 @@ namespace recepty
                 setPatientDetails();
             }
 
-                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridView1.RowHeadersVisible = false;
-                dataGridView1.ReadOnly = true;
-                dataGridView1.ClearSelection();
-            }
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.ReadOnly = true;
+            dataGridView1.ClearSelection();
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            textBox3.MaxLength = 11;
+        }
 
         void getNFZdepartements()
         {
@@ -95,6 +99,18 @@ namespace recepty
             pacjent.insertToDb();
         }
 
+        void validatePESEL()
+        {
+            if (!Patient.checkPESEL(textBox3.Text))
+            {
+                errorProvider1.SetError(textBox3, "Nieprawidłowy numer PESEL!");
+            }
+            else
+            {
+                errorProvider1.Clear();
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             addPatient(getPatientDetails());
@@ -122,6 +138,11 @@ namespace recepty
             int id = (int)dataGridView1[0, dataGridView1.CurrentRow.Index].Value;
             dataGridView2.DataSource = null;
             dataGridView2.DataSource = PrescriptionItem.get(id);
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            validatePESEL();
         }
     }
 }

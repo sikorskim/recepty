@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace recepty
 {
-    public class ReceptyView
+    public class PrescriptionView
     {
         public int PrescriptionId { get; set; }
         [DisplayName("Data wystawienia")]
@@ -17,10 +17,10 @@ namespace recepty
         [DisplayName("Wystawił")]
         public string DoctorName { get; set; }
 
-        public ReceptyView()
+        public PrescriptionView()
         { }
 
-        public ReceptyView(int prescriptionId, DateTime dateOfIssue, string number, string doctorFullName)
+        public PrescriptionView(int prescriptionId, DateTime dateOfIssue, string number, string doctorFullName)
         {
             PrescriptionId = prescriptionId;
             DateOfIssue = dateOfIssue;

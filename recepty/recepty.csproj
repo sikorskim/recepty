@@ -124,7 +124,7 @@
     <Compile Include="classes\Diagnostics.cs" />
     <Compile Include="classes\DrugView.cs" />
     <Compile Include="classes\PrescriptionItem.cs" />
-    <Compile Include="classes\ReceptyView.cs" />
+    <Compile Include="classes\PrescriptionView.cs" />
     <Compile Include="classes\Uprawnienia.cs" />
     <Compile Include="forms\AboutBox1.cs">
       <SubType>Form</SubType>
