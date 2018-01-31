@@ -26,14 +26,14 @@ namespace recepty
             BL7 = lek.BL7;
         }
 
-        public static List<Lek> get(int prescriptionId)
+        public static List<DrugView> get(int prescriptionId)
         {
             Model1 model = new Model1();
-            List<Lek> result = new List<Lek>();
+            List<DrugView> result = new List<DrugView>();
             var items = model.PrescriptionItem.Where(p => p.PrescriptionId == prescriptionId);
             foreach (PrescriptionItem pi in items)
             {
-                result.Add(pi.Lek);
+                result.Add(new DrugView(pi.Lek));
             }
 
             return result;

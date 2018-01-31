@@ -10,7 +10,6 @@ namespace recepty
     public class DrugView
     {
         public string BL7 { get; set; }
-        public string EAN { get; set; }
         [DisplayName("Nazwa")]
         public string Name { get; set; }
         [DisplayName("Substancja czynna")]
@@ -28,7 +27,6 @@ namespace recepty
         public DrugView(Lek drug)
         {
             BL7 = drug.BL7;
-            EAN = drug.EAN;
             Name = drug.Nazwa;
             NameInt = drug.NazwaInt;
             Form = drug.Postac;

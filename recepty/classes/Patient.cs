@@ -166,7 +166,21 @@ namespace recepty
 
         string getFullAddress()
         {
-            return null;//Address.FullAddress;
+            Model1 model = new Model1();
+            return model.Address.Single(p => p.AddressId == AddressId).FullAddress;
+        }
+
+        public static bool checkSeniorCredentials(DateTime dateOfBirth)
+        {
+            int age = DateTime.Now.Year - dateOfBirth.Year;
+            if (age > 75)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

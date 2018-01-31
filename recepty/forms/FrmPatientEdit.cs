@@ -33,17 +33,22 @@ namespace recepty
             if (patientId != 0)
             {
                 patient = Patient.get(patientId);
-                setPatientDetails();
+                getPatientDetails();
             }
 
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.ReadOnly = true;
-            dataGridView1.ClearSelection();
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
+            dataGridViewSetup(dataGridView1);
+            dataGridViewSetup(dataGridView2);
             textBox3.MaxLength = 11;
             button1.Enabled = false;
+        }
+
+        void dataGridViewSetup(DataGridView dataGridView)
+        {
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.RowHeadersVisible = false;
+            dataGridView.ReadOnly = true;
+            dataGridView.ClearSelection();
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;            
         }
 
         void getNFZdepartements()
@@ -63,7 +68,7 @@ namespace recepty
             Dispose();
         }
 
-        void setPatientDetails()
+        void getPatientDetails()
         {
             textBox1.Text = patient.Name;
             textBox2.Text = patient.Lastname;
@@ -74,13 +79,16 @@ namespace recepty
             textBox7.Text = patient.Address.PostalCode;
             textBox8.Text = patient.Address.City;
             comboBox1.SelectedItem = patient.NFZDepartament;
-            comboBox2.SelectedText = patient.Uprawnienie;
+            comboBox2.SelectedText = patient.Uprawnienie;            
+        }
 
+        void getPrescriptionHistory()
+        {
             dataGridView1.DataSource = Prescription.getViewList(patient);
             dataGridView1.Columns[0].Visible = false;
         }
 
-        Patient getPatientDetails()
+        Patient setPatientDetails()
         {
             string name = textBox1.Text;
             string lastname = textBox2.Text;
@@ -94,8 +102,8 @@ namespace recepty
             Uprawnienie uprawnienie = comboBox2.SelectedItem as Uprawnienie;
 
             Address adres = new Address(street, buildingNo, localNo, postalCode, city);
-            Patient netPatient = new Patient(lastname, name, pesel, adres, oddzialNFZ, uprawnienie);
-            return netPatient;
+            Patient newPatient = new Patient(lastname, name, pesel, adres, oddzialNFZ, uprawnienie);
+            return newPatient;
         }
 
         void addPatient(Patient pacjent)
@@ -161,9 +169,25 @@ namespace recepty
             }
         }
 
+        void getPrescriptionItems()
+        {
+            int id = (int)dataGridView1[0, dataGridView1.CurrentRow.Index].Value;
+            dataGridView2.DataSource = null;
+            dataGridView2.DataSource = PrescriptionItem.get(id);
+            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+        }
+
+        void checkSeniorCredentials()
+        {
+            if (Patient.checkSeniorCredentials(dateTimePicker1.Value))
+            {
+                comboBox2.SelectedIndex=comboBox2.FindStringExact("S");
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            addPatient(getPatientDetails());
+            addPatient(setPatientDetails());
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -185,9 +209,7 @@ namespace recepty
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            int id = (int)dataGridView1[0, dataGridView1.CurrentRow.Index].Value;
-            dataGridView2.DataSource = null;
-            dataGridView2.DataSource = PrescriptionItem.get(id);
+            getPrescriptionItems();
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -203,6 +225,19 @@ namespace recepty
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
             validateInput();
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == tabPage2)
+            {
+                getPrescriptionHistory();
+            }
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            checkSeniorCredentials();
         }
     }
 }
