@@ -369,5 +369,12 @@ namespace recepty
         {
             drugSearch();
         }
+
+        private void dataGridView2_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int id = (int)dataGridView2[0, dataGridView2.CurrentRow.Index].Value;
+            FrmPrescriptionPreview frmPrescriptionPreview = new FrmPrescriptionPreview(id);
+            frmPrescriptionPreview.Show();
+        }
     }
 }

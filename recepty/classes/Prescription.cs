@@ -25,12 +25,12 @@ namespace recepty
         [ForeignKey("DoctorId")]
         public virtual Doctor Doctor { get; private set; }
         [NotMapped]
-        public List<Lek> Leki { get; private set; }
+        public Lek[] Leki { get; private set; }
 
         public Prescription()
         { }
 
-        public Prescription(PrescriptionNumber prescriptionNumber, Patient patient, Doctor doctor, List<Lek> leki)
+        public Prescription(PrescriptionNumber prescriptionNumber, Patient patient, Doctor doctor, Lek[] leki)
         {
             PrescriptionNumberId = prescriptionNumber.PrescriptionNumberId;
             PatientId = patient.PatientId;
@@ -39,13 +39,14 @@ namespace recepty
             Leki = leki;
         }
 
-        public static Prescription get(Prescription prescription)
+        public static Prescription get(int prescriptionId)
         {
             Model1 model = new Model1();
+            Prescription prescription = model.Prescription.Single(p => p.PrescriptionId == prescriptionId);
             prescription.Doctor = model.Doctor.Single(p => p.DoctorId == prescription.DoctorId);
             prescription.Patient = model.Patient.Single(p => p.PatientId == prescription.PatientId);
             prescription.PrescriptionNumber = model.PrescriptionNumber.Single(p => p.PrescriptionNumberId == prescription.PrescriptionNumberId);
-            prescription.Leki = model.PrescriptionItem.Where(p => p.PrescriptionId == prescription.PrescriptionId).Select(p => p.Lek).ToList();
+            prescription.Leki = model.PrescriptionItem.Where(p => p.PrescriptionId == prescription.PrescriptionId).Select(p => p.Lek).ToArray();
             return prescription;
         }
 
@@ -66,6 +67,14 @@ namespace recepty
                 result.Add(new PrescriptionView(pres.PrescriptionId, pres.DateOfIssue, number, pres.Doctor.FullName));
             }
             return result;
+        }
+
+        Lek[] getDrugs()
+        {
+            Model1 model = new Model1();
+            Lek[] drugs = new Lek[5];
+            drugs = model.PrescriptionItem.Where(p => p.PrescriptionId == PrescriptionId).Select(p => p.Lek).ToArray();
+            return drugs;
         }
 
         public bool insertToDb()
@@ -99,11 +108,6 @@ namespace recepty
         }
 
         public void print(System.Drawing.Printing.PrintPageEventArgs e)
-        {
-            Graphics g = e.Graphics;
-            drawPrescriptionTemplate(g);
-        }
-        public void preview(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             drawPrescriptionTemplate(g);
@@ -183,9 +187,9 @@ namespace recepty
             Font fontSmall = new Font("Arial", 8);
             Brush brush = Brushes.Black;
 
-            Point ptReceptaStr = new Point(marginLeft, marginTop);
-            Point ptReceptaVal = new Point(marginLeft + 30, marginTop);
-            Point ptReceptaVal2 = new Point(30, 155);
+            Point ptPrescriptonStr = new Point(marginLeft, marginTop);
+            Point ptPrescriptionNumberVal = new Point(marginLeft + 30, marginTop);
+            Point ptPrescriptionNumberVal2 = new Point(30, 155);
             Point ptSwiadczeniodawcaStr = new Point(marginLeft, 30);
             Point ptPacjentStr = new Point(marginLeft, 35);
             Point ptPacjentFullNameVal = new Point(marginLeft, 40);
@@ -197,12 +201,17 @@ namespace recepty
             Point ptUprawnieniaStr = new Point(72, 55);
             Point ptUprawnieniaVal = new Point(72, 65);
             Point ptRpStr = new Point(marginLeft, 75);
+            Point ptPosition0 = new Point(marginLeft, hLine70.Y - 12);
+            Point ptPosition1 = new Point(marginLeft, hLine80.Y - 12);
+            Point ptPosition2 = new Point(marginLeft, hLine90.Y - 12);
+            Point ptPosition3 = new Point(marginLeft, hLine100.Y - 12);
+            Point ptPosition4 = new Point(marginLeft, hLine50.Y - 12);
             Point ptDataWystawieniaStr = new Point(marginLeft, 160);
             Point ptDataWystawieniaVal = new Point(marginLeft, 165);
             Point ptDataRealizacjiStr = new Point(marginLeft, 180);
 
-            g.DrawString("Recepta", fontDefault, brush, ptReceptaStr);
-            g.DrawString(PrescriptionNumber.Number, fontDefault, brush, ptReceptaVal);
+            g.DrawString("Recepta", fontDefault, brush, ptPrescriptonStr);
+            g.DrawString(PrescriptionNumber.Number, fontDefault, brush, ptPrescriptionNumberVal);
             g.DrawString("Świadczeniodawca", fontDefault, brush, ptSwiadczeniodawcaStr);
             g.DrawString("Pacjent", fontDefault, brush, ptPacjentStr);
             g.DrawString(Patient.FullName, fontDefault, brush, ptPacjentFullNameVal);
@@ -214,13 +223,27 @@ namespace recepty
             g.DrawString(Patient.Kod, fontDefault, brush, ptNfzVal);
             g.DrawString("Uprawnienia \ndodatkowe", fontDefault, brush, ptUprawnieniaStr);
             g.DrawString(Patient.Uprawnienie, fontDefault, brush, ptUprawnieniaVal);
-            g.DrawString(PrescriptionNumber.Number, fontDefault, brush, ptReceptaVal2);
+            g.DrawString(PrescriptionNumber.Number, fontDefault, brush, ptPrescriptionNumberVal2);
             g.DrawString("Data wystawienia", fontSmall, brush, ptDataWystawieniaStr);
             g.DrawString(DateOfIssue.ToShortDateString(), fontDefault, brush, ptDataWystawieniaVal);
             g.DrawString("Data realizacji 'od dnia'", fontSmall, brush, ptDataRealizacjiStr);
 
-            Point ptBarcodePrescriptionNumber = new Point(27, 150);
+            Point[] items = new Point[5];
+            items[0] = ptPosition0;
+            items[1] = ptPosition1;
+            items[2] = ptPosition2;
+            items[3] = ptPosition3;
+            items[4] = ptPosition4;
 
+            int i = 0;
+            foreach (Lek lek in Leki)
+            {
+                if (Leki[i] != null)
+                    g.DrawString(Leki[i].FullInfo, fontDefault, brush, items[i]);
+                i++;
+            }
+
+            Point ptBarcodePrescriptionNumber = new Point(27, 150);
             Image imgPrescriptionNumberBarcode = drawBarcode(PrescriptionNumber.Number);
             g.DrawImage(imgPrescriptionNumberBarcode, ptBarcodePrescriptionNumber);
         }

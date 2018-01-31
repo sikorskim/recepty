@@ -33,5 +33,19 @@ namespace recepty
             Dose = drug.Dawka;
             Package = drug.Opakowanie;
         }
+
+        public static Lek[] convertDrugViewToDrug(List<DrugView> drugViewList)
+        {
+            Lek[] drugList = new Lek[5];
+            Model1 model = new Model1();
+
+            int i = 0;
+            foreach (DrugView drugView in drugViewList)
+            {
+                drugList[i]=model.Lek.Single(p => p.BL7 == drugView.BL7);
+                i++;
+            }
+            return drugList;
+        }
     }
 }

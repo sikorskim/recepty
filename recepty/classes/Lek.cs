@@ -25,6 +25,7 @@ namespace recepty
         public string Dawka { get; private set; }
         public string Opakowanie { get; private set; }
         public bool Active { get; private set; }
+        public virtual string FullInfo { get { return getFullInfo(); } }
 
         public Lek() { }
 
@@ -231,6 +232,11 @@ namespace recepty
             XDocument doc = XDocument.Load(path);
             int count = doc.Element("Leki").Elements("Lek").Count();
             return count;
+        }
+
+        string getFullInfo()
+        {
+            return Nazwa + "\n" + Postac + " " + Dawka + " " + Opakowanie;
         }
     }
 }

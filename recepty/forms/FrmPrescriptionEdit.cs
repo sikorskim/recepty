@@ -20,19 +20,22 @@ namespace recepty
         }
 
         Patient patient;
+        List<DrugView> list = new List<DrugView>();
 
         void startup()
-        {       
+        {
             loadDrugFilters();
-            dataGridViewSettings();
+            dataGridViewSetup(dataGridView1);
+            dataGridViewSetup(dataGridView2);
+            radioButton1.Select();
         }
 
-        void dataGridViewSettings()
+        void dataGridViewSetup(DataGridView dataGridView)
         {
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.ReadOnly = true;
-            dataGridView1.ClearSelection();
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.RowHeadersVisible = false;
+            dataGridView.ReadOnly = true;
+            dataGridView.ClearSelection();
         }
 
         void loadDrugFilters()
@@ -51,7 +54,7 @@ namespace recepty
         private void drugSearch()
         {
             string query = textBox9.Text;
-            if (query != null && comboBox3.SelectedValue!=null)
+            if (query != null && comboBox3.SelectedValue != null)
             {
                 string queryType = comboBox2.SelectedValue.ToString();
                 string filter = comboBox3.SelectedValue.ToString();
@@ -60,14 +63,13 @@ namespace recepty
             }
         }
 
-        List<Lek> list = new List<Lek>();
         void addDrugToPrescription()
         {
             if (list.Count < 5)
             {
                 string bl7 = (string)dataGridView1[0, dataGridView1.CurrentRow.Index].Value;
                 Lek lek = Lek.get(bl7);
-                list.Add(lek);
+                list.Add(new DrugView(lek));
                 dataGridView2.DataSource = null;
                 dataGridView2.DataSource = list;
             }
@@ -81,8 +83,9 @@ namespace recepty
         {
             Model1 model = new Model1();
             Doctor doctor = model.Doctor.FirstOrDefault();
+            Lek[] drugList = DrugView.convertDrugViewToDrug(list);
 
-            Prescription prescription = new Prescription(PrescriptionNumber.getUnusedNumber("Rp"), patient, doctor,list);
+            Prescription prescription = new Prescription(PrescriptionNumber.getUnusedNumber("Rp"), patient, doctor, drugList);
             prescription.insertToDb();
         }
 
@@ -110,8 +113,9 @@ namespace recepty
         {
             Model1 model = new Model1();
             Doctor doctor = model.Doctor.FirstOrDefault();
+            Lek[] drugList = DrugView.convertDrugViewToDrug(list);
 
-            Prescription prescription = new Prescription(PrescriptionNumber.getUnusedNumber("Rp"), patient, doctor, list);
+            Prescription prescription = new Prescription(PrescriptionNumber.getUnusedNumber("Rp"), patient, doctor, drugList);
             FrmPrescriptionPrint prescriptionPrint = new FrmPrescriptionPrint(prescription);
             prescriptionPrint.Show();
         }
@@ -120,10 +124,25 @@ namespace recepty
         {
             Model1 model = new Model1();
             Doctor doctor = model.Doctor.FirstOrDefault();
+            Lek[] drugList = DrugView.convertDrugViewToDrug(list);
+            Prescription prescription = new Prescription(PrescriptionNumber.getUnusedNumber("Rp"), patient, doctor, drugList);
+            //FrmPrescriptionPreview frmPrescriptionPreview = new FrmPrescriptionPreview(prescription);
+            //frmPrescriptionPreview.Show();
+        }
 
-            Prescription prescription = new Prescription(PrescriptionNumber.getUnusedNumber("Rp"), patient, doctor, list);
-            FrmPrescriptionPreview frmPrescriptionPreview = new FrmPrescriptionPreview(prescription);
-            frmPrescriptionPreview.Show();
+        private void FrmPrescriptionEdit_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            textBox9.Clear();
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

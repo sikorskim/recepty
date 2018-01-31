@@ -26,7 +26,7 @@ namespace recepty
 
         void startup()
         {
-            prescription = Prescription.get(prescription);
+            //prescription = Prescription.get(prescription);
             drawPrescription();
             setData();
         }
