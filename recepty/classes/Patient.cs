@@ -166,7 +166,7 @@ namespace recepty
 
         string getFullAddress()
         {
-            return Address.FullAddress;
+            return null;//Address.FullAddress;
         }
     }
 }

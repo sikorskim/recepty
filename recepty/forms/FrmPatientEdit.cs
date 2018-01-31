@@ -21,7 +21,10 @@ namespace recepty
 
         int patientId;
         Patient patient;
-        ErrorProvider errorProvider1 = new ErrorProvider();
+
+        ErrorProvider errorProviderPesel = new ErrorProvider();
+        ErrorProvider errorProviderName = new ErrorProvider();
+        ErrorProvider errorProviderLastname = new ErrorProvider();
 
         void startup()
         {
@@ -40,6 +43,7 @@ namespace recepty
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
             textBox3.MaxLength = 11;
+            button1.Enabled = false;
         }
 
         void getNFZdepartements()
@@ -99,15 +103,61 @@ namespace recepty
             pacjent.insertToDb();
         }
 
-        void validatePESEL()
+        bool validatePESEL(TextBox textBox)
         {
-            if (!Patient.checkPESEL(textBox3.Text))
+            if (!Patient.checkPESEL(textBox.Text))
             {
-                errorProvider1.SetError(textBox3, "Nieprawidłowy numer PESEL!");
+                errorProviderPesel.SetError(textBox, "Nieprawidłowy numer PESEL!");
+                return false;
             }
             else
             {
-                errorProvider1.Clear();
+                errorProviderPesel.Clear();
+                return true;
+            }
+        }
+
+        bool validateName(TextBox textBox)
+        {
+            if (textBox.Text.Length<3)
+            {
+                errorProviderName.SetError(textBox, "Imię jest wymagane!");
+                return false;
+            }
+            else
+            {
+                errorProviderName.Clear();
+                return true;
+            }
+        }
+
+        bool validateLastname(TextBox textBox)
+        {
+            if (textBox.Text.Length < 3)
+            {
+                errorProviderLastname.SetError(textBox2, "Nazwisko jest wymagane!");
+                return false;
+            }
+            else
+            {
+                errorProviderLastname.Clear();
+                return true;
+            }
+        }
+
+        void validateInput()
+        {
+            bool peselValid = validatePESEL(textBox3);
+            bool nameValid = validateName(textBox1);
+            bool lastnameValid = validateLastname(textBox2);
+
+            if (peselValid && nameValid && lastnameValid)
+            {
+                button1.Enabled = true;
+            }
+            else
+            {
+                button1.Enabled = false;
             }
         }
 
@@ -142,7 +192,17 @@ namespace recepty
 
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
-            validatePESEL();
+            validateInput();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            validateInput();
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            validateInput();
         }
     }
 }
