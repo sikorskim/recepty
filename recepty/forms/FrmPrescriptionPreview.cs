@@ -32,5 +32,16 @@ namespace recepty
         {
             prescription.print(e);
         }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            //printDialog1.Document = printDocument1;
+            DialogResult result = printDialog1.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                printDocument1.Print();
+            }
+        }
     }
 }

@@ -374,7 +374,7 @@ namespace recepty
         {
             int id = (int)dataGridView2[0, dataGridView2.CurrentRow.Index].Value;
             FrmPrescriptionPreview frmPrescriptionPreview = new FrmPrescriptionPreview(id);
-            frmPrescriptionPreview.Show();
+            frmPrescriptionPreview.ShowDialog();
         }
     }
 }

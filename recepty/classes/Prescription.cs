@@ -196,9 +196,9 @@ namespace recepty
             Point ptPatientFullAddressVal = new Point(marginLeft, 45);
             Point ptPeselStr = new Point(marginLeft, 69);
             Point ptPeselVal = new Point(marginLeft + 20, 69);
-            Point ptNfzStr = new Point(72, 35);
+            Point ptNfzStr = new Point(70, 35);
             Point ptNfzVal = new Point(72, 40);
-            Point ptUprawnieniaStr = new Point(72, 55);
+            Point ptUprawnieniaStr = new Point(70, 55);
             Point ptUprawnieniaVal = new Point(72, 65);
             Point ptRpStr = new Point(marginLeft, 75);
             Point ptPosition0 = new Point(marginLeft, hLine70.Y - 12);
