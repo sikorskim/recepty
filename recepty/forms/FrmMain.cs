@@ -237,7 +237,7 @@ namespace recepty
         private void wyświetlWystawioneToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tabControl1.SelectedTab = tabPage2;
-            dataGridView2.DataSource = Prescription.getList();
+            dataGridView2.DataSource = Prescription.getViewList();
         }
 
         private void nowyToolStripMenuItem_Click(object sender, EventArgs e)

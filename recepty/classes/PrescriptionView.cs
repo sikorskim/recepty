@@ -15,17 +15,20 @@ namespace recepty
         [DisplayName("Numer")]
         public string Number { get; set; }
         [DisplayName("Wystawił")]
-        public string DoctorName { get; set; }
+        public string DoctorFullName { get; set; }
+        [DisplayName("Pacjent")]
+        public string PatientFullName { get; set; }
 
         public PrescriptionView()
         { }
 
-        public PrescriptionView(int prescriptionId, DateTime dateOfIssue, string number, string doctorFullName)
+        public PrescriptionView(Prescription prescription)
         {
-            PrescriptionId = prescriptionId;
-            DateOfIssue = dateOfIssue;
-            Number = number;
-            DoctorName = doctorFullName;
+            PrescriptionId = prescription.PrescriptionId;
+            DateOfIssue = prescription.DateOfIssue;
+            Number = prescription.PrescriptionNumber.Number;
+            DoctorFullName = prescription.Doctor.FullName;
+            PatientFullName = prescription.Patient.FullName;
         }
     }
 }

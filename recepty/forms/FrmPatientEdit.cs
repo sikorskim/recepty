@@ -229,7 +229,7 @@ namespace recepty
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl1.SelectedTab == tabPage2)
+            if (tabControl1.SelectedTab == tabPage2 && patientId>0)
             {
                 getPrescriptionHistory();
             }

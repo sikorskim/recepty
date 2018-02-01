@@ -44,27 +44,32 @@ namespace recepty
             Model1 model = new Model1();
             Prescription prescription = model.Prescription.Single(p => p.PrescriptionId == prescriptionId);
             prescription.Doctor = model.Doctor.Single(p => p.DoctorId == prescription.DoctorId);
-            prescription.Patient = model.Patient.Single(p => p.PatientId == prescription.PatientId);
+            prescription.Patient = Patient.get(prescription.PatientId);
             prescription.PrescriptionNumber = model.PrescriptionNumber.Single(p => p.PrescriptionNumberId == prescription.PrescriptionNumberId);
             prescription.Leki = model.PrescriptionItem.Where(p => p.PrescriptionId == prescription.PrescriptionId).Select(p => p.Lek).ToArray();
             return prescription;
         }
 
-        public static List<Prescription> getList()
+        public static List<PrescriptionView> getViewList()
         {
             Model1 model = new Model1();
-            return model.Prescription.ToList();
+            List<Prescription> items= model.Prescription.ToList();
+            List<PrescriptionView> result = new List<PrescriptionView>();
+            foreach (Prescription prescription in items)
+            {
+                result.Add(new PrescriptionView(prescription));
+            }
+            return result;
         }
 
         public static List<PrescriptionView> getViewList(Patient patient)
         {
             Model1 model = new Model1();
-            var items = model.Prescription.Where(p => p.PatientId == patient.PatientId).ToList();
+            List<Prescription> items = model.Prescription.Where(p => p.PatientId == patient.PatientId).ToList();
             List<PrescriptionView> result = new List<PrescriptionView>();
-            foreach (Prescription pres in items)
-            {
-                string number = model.PrescriptionNumber.Single(p => p.PrescriptionNumberId == pres.PrescriptionNumberId).Number;
-                result.Add(new PrescriptionView(pres.PrescriptionId, pres.DateOfIssue, number, pres.Doctor.FullName));
+            foreach (Prescription prescription in items)
+            {                
+                result.Add(new PrescriptionView(prescription));
             }
             return result;
         }
@@ -139,10 +144,17 @@ namespace recepty
             g.DrawLine(p, hLine10, hLine11);
             g.DrawLine(p, hLine20, hLine21);
 
+            Point hLine30 = new Point(69, 48);
+            Point hLine31 = new Point(99, 48);
+            g.DrawLine(p, hLine30, hLine31);
+            Point hLine110 = new Point(69, 61);
+            Point hLine111 = new Point(99, 61);
+            g.DrawLine(p, hLine110, hLine111);
+
             Point vLine00 = new Point(69, 35);
             Point vLine01 = new Point(69, 74);
             g.DrawLine(p, vLine00, vLine01);
-
+            
             Point vLine10 = new Point(69, 74);
             Point vLine11 = new Point(69, 148);
             g.DrawLine(penDotted, vLine10, vLine11);
@@ -168,10 +180,6 @@ namespace recepty
             Point hLine51 = new Point(99, 148);
             g.DrawLine(penDotted, hLine50, hLine51);
 
-            Point hLine30 = new Point(69, 55);
-            Point hLine31 = new Point(99, 55);
-            g.DrawLine(p, hLine30, hLine31);
-
             Point vLine20 = new Point(35, 160);
             Point vLine21 = new Point(35, 200);
             g.DrawLine(p, vLine20, vLine21);
@@ -188,8 +196,7 @@ namespace recepty
             Brush brush = Brushes.Black;
 
             Point ptPrescriptonStr = new Point(marginLeft, marginTop);
-            Point ptPrescriptionNumberVal = new Point(marginLeft + 30, marginTop);
-            Point ptPrescriptionNumberVal2 = new Point(30, 155);
+            Point ptPrescriptionNumberVal = new Point(marginLeft + 30, marginTop);           
             Point ptSwiadczeniodawcaStr = new Point(marginLeft, 30);
             Point ptPacjentStr = new Point(marginLeft, 35);
             Point ptPacjentFullNameVal = new Point(marginLeft, 40);
@@ -197,15 +204,18 @@ namespace recepty
             Point ptPeselStr = new Point(marginLeft, 69);
             Point ptPeselVal = new Point(marginLeft + 20, 69);
             Point ptNfzStr = new Point(70, 35);
-            Point ptNfzVal = new Point(72, 40);
-            Point ptUprawnieniaStr = new Point(70, 55);
-            Point ptUprawnieniaVal = new Point(72, 65);
+            Point ptNfzVal = new Point(75, 40);
+            Point ptUprawnieniaStr = new Point(70, hLine30.Y);
+            Point ptUprawnieniaVal = new Point(75, hLine30.Y+5);
+            Point ptChorobyPrzewlekle = new Point(70, hLine110.Y);
             Point ptRpStr = new Point(marginLeft, 75);
+            Point ptRefundacjaStr = new Point(70, 75);
             Point ptPosition0 = new Point(marginLeft, hLine70.Y - 12);
             Point ptPosition1 = new Point(marginLeft, hLine80.Y - 12);
             Point ptPosition2 = new Point(marginLeft, hLine90.Y - 12);
             Point ptPosition3 = new Point(marginLeft, hLine100.Y - 12);
             Point ptPosition4 = new Point(marginLeft, hLine50.Y - 12);
+            Point ptPrescriptionNumberVal2 = new Point(27, 155);
             Point ptDataWystawieniaStr = new Point(marginLeft, 160);
             Point ptDataWystawieniaVal = new Point(marginLeft, 165);
             Point ptDataRealizacjiStr = new Point(marginLeft, 180);
@@ -215,14 +225,16 @@ namespace recepty
             g.DrawString("Świadczeniodawca", fontDefault, brush, ptSwiadczeniodawcaStr);
             g.DrawString("Pacjent", fontDefault, brush, ptPacjentStr);
             g.DrawString(Patient.FullName, fontDefault, brush, ptPacjentFullNameVal);
-            // g.DrawString(Patient.FullAddress, fontDefault, brush, ptPatientFullAddressVal);
+            g.DrawString(Patient.FullAddress, fontDefault, brush, ptPatientFullAddressVal);
             g.DrawString("R.p.", fontDefault, brush, ptRpStr);
+            g.DrawString("Refundacja", fontDefault, brush, ptRefundacjaStr);
             g.DrawString("PESEL", fontDefault, brush, ptPeselStr);
             g.DrawString(Patient.PESEL, fontDefault, brush, ptPeselVal);
             g.DrawString("Oddział NFZ", fontDefault, brush, ptNfzStr);
             g.DrawString(Patient.Kod, fontDefault, brush, ptNfzVal);
-            g.DrawString("Uprawnienia \ndodatkowe", fontDefault, brush, ptUprawnieniaStr);
+            g.DrawString("Uprawnienia", fontDefault, brush, ptUprawnieniaStr);
             g.DrawString(Patient.Uprawnienie, fontDefault, brush, ptUprawnieniaVal);
+            g.DrawString("Ch. przewlekłe", fontDefault, brush, ptChorobyPrzewlekle);
             g.DrawString(PrescriptionNumber.Number, fontDefault, brush, ptPrescriptionNumberVal2);
             g.DrawString("Data wystawienia", fontSmall, brush, ptDataWystawieniaStr);
             g.DrawString(DateOfIssue.ToShortDateString(), fontDefault, brush, ptDataWystawieniaVal);
