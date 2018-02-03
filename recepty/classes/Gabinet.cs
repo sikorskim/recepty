@@ -20,6 +20,8 @@ namespace recepty
 
         public Address Adres { get; private set; }
 
+        Gabinet()
+        { }
         public Gabinet(string nazwa, string regon, string nip, Address adres)
         {
             Nazwa = nazwa;
@@ -42,6 +44,14 @@ namespace recepty
                 return false;
             }
             return true;
+        }
+
+        public static Gabinet get()
+        {
+            Model1 model = new Model1();
+            Gabinet gabinet = model.Gabinet.FirstOrDefault();
+           // gabinet.Adres = model.Address.Single(p => p.AddressId == Adres.AddressId);
+            return gabinet;
         }
     }
 }

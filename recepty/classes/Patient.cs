@@ -31,6 +31,7 @@ namespace recepty
         public string Uprawnienie { get; private set; }
         public virtual string FullName { get { return getFullName(); } }
         public virtual string FullAddress { get { return getFullAddress(); } }
+        public virtual int Age { get { return getAge(); } }
 
         public Patient()
         { }
@@ -181,6 +182,11 @@ namespace recepty
             {
                 return false;
             }
+        }
+
+       int getAge()
+        {
+            return DateTime.Now.Year - DateOfBirth.Year;
         }
     }
 }

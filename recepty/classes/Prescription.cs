@@ -26,6 +26,8 @@ namespace recepty
         public virtual Doctor Doctor { get; private set; }
         [NotMapped]
         public Lek[] Leki { get; private set; }
+        [NotMapped]
+        public Gabinet Gabinet { get; private set; }
 
         public Prescription()
         { }
@@ -47,6 +49,7 @@ namespace recepty
             prescription.Patient = Patient.get(prescription.PatientId);
             prescription.PrescriptionNumber = model.PrescriptionNumber.Single(p => p.PrescriptionNumberId == prescription.PrescriptionNumberId);
             prescription.Leki = model.PrescriptionItem.Where(p => p.PrescriptionId == prescription.PrescriptionId).Select(p => p.Lek).ToArray();
+            prescription.Gabinet = Gabinet.get();
             return prescription;
         }
 
@@ -196,11 +199,13 @@ namespace recepty
             Brush brush = Brushes.Black;
 
             Point ptPrescriptonStr = new Point(marginLeft, marginTop);
-            Point ptPrescriptionNumberVal = new Point(marginLeft + 30, marginTop);           
+            Point ptPrescriptionNumberVal = new Point(marginLeft + 30, marginTop);
+            Point ptSwiadczeniodawcaVal = new Point(marginLeft, marginTop + 5);
             Point ptSwiadczeniodawcaStr = new Point(marginLeft, 30);
             Point ptPacjentStr = new Point(marginLeft, 35);
             Point ptPacjentFullNameVal = new Point(marginLeft, 40);
             Point ptPatientFullAddressVal = new Point(marginLeft, 45);
+            Point ptWiek = new Point(marginLeft, 60);
             Point ptPeselStr = new Point(marginLeft, 69);
             Point ptPeselVal = new Point(marginLeft + 20, 69);
             Point ptNfzStr = new Point(70, 35);
@@ -216,18 +221,24 @@ namespace recepty
             Point ptPosition3 = new Point(marginLeft, hLine100.Y - 12);
             Point ptPosition4 = new Point(marginLeft, hLine50.Y - 12);
             Point ptPrescriptionNumberVal2 = new Point(27, 155);
+            Point ptDaneLekarzaStr = new Point(40, 160);
+            Point ptDaneLekarzaVal = new Point(40, 165);
+            Point ptDaneLekarzaNrPrawaVal = new Point(40, 170);
             Point ptDataWystawieniaStr = new Point(marginLeft, 160);
             Point ptDataWystawieniaVal = new Point(marginLeft, 165);
             Point ptDataRealizacjiStr = new Point(marginLeft, 180);
+            Point ptWydrukWlasnyStr = new Point(70, 195);
 
             g.DrawString("Recepta", fontDefault, brush, ptPrescriptonStr);
             g.DrawString(PrescriptionNumber.Number, fontDefault, brush, ptPrescriptionNumberVal);
+            g.DrawString(Gabinet.Nazwa+"\n"+"REGON "+Gabinet.REGON,fontDefault,brush,ptSwiadczeniodawcaVal);
             g.DrawString("Świadczeniodawca", fontDefault, brush, ptSwiadczeniodawcaStr);
             g.DrawString("Pacjent", fontDefault, brush, ptPacjentStr);
             g.DrawString(Patient.FullName, fontDefault, brush, ptPacjentFullNameVal);
             g.DrawString(Patient.FullAddress, fontDefault, brush, ptPatientFullAddressVal);
             g.DrawString("R.p.", fontDefault, brush, ptRpStr);
             g.DrawString("Refundacja", fontDefault, brush, ptRefundacjaStr);
+            g.DrawString("Wiek: "+Patient.Age,fontDefault, brush,ptWiek);
             g.DrawString("PESEL", fontDefault, brush, ptPeselStr);
             g.DrawString(Patient.PESEL, fontDefault, brush, ptPeselVal);
             g.DrawString("Oddział NFZ", fontDefault, brush, ptNfzStr);
@@ -236,9 +247,13 @@ namespace recepty
             g.DrawString(Patient.Uprawnienie, fontDefault, brush, ptUprawnieniaVal);
             g.DrawString("Ch. przewlekłe", fontDefault, brush, ptChorobyPrzewlekle);
             g.DrawString(PrescriptionNumber.Number, fontDefault, brush, ptPrescriptionNumberVal2);
+            g.DrawString("Dane i podpis lekarza", fontDefault, brush, ptDaneLekarzaStr);
+            g.DrawString(Doctor.FullName, fontDefault,brush,ptDaneLekarzaVal);
+            g.DrawString("Nr prawa: "+Doctor.RightToPracticeNumber, fontDefault, brush, ptDaneLekarzaNrPrawaVal);
             g.DrawString("Data wystawienia", fontSmall, brush, ptDataWystawieniaStr);
             g.DrawString(DateOfIssue.ToShortDateString(), fontDefault, brush, ptDataWystawieniaVal);
             g.DrawString("Data realizacji 'od dnia'", fontSmall, brush, ptDataRealizacjiStr);
+            g.DrawString("Wydruk własny", fontSmall, brush, ptWydrukWlasnyStr);
 
             Point[] items = new Point[5];
             items[0] = ptPosition0;
@@ -255,9 +270,15 @@ namespace recepty
                 i++;
             }
 
+            Point ptBarcodeREGON = new Point(65, 28);
+            Image imgREGONBarcode = drawBarcode(Gabinet.REGON);
+            g.DrawImage(imgREGONBarcode, ptBarcodeREGON);
             Point ptBarcodePrescriptionNumber = new Point(27, 150);
             Image imgPrescriptionNumberBarcode = drawBarcode(PrescriptionNumber.Number);
             g.DrawImage(imgPrescriptionNumberBarcode, ptBarcodePrescriptionNumber);
+            Point ptBarcodeRightToPractice = new Point(45, 175);
+            Image imgRightToPracticeBarcode = drawBarcode(Doctor.RightToPracticeNumber);
+            g.DrawImage(imgRightToPracticeBarcode, ptBarcodeRightToPractice);
         }
     }
 }
