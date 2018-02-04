@@ -45,6 +45,8 @@ namespace recepty
                 drugList[i]=model.Lek.Single(p => p.BL7 == drugView.BL7);
                 i++;
             }
+
+
             return drugList;
         }
     }

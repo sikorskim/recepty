@@ -69,13 +69,21 @@ namespace recepty
             {
                 string bl7 = (string)dataGridView1[0, dataGridView1.CurrentRow.Index].Value;
                 Lek lek = Lek.get(bl7);
+                List<Refundacja> refundList = Refundacja.getRefunds(bl7);
+
+                if (refundList.Count > 0)
+                {
+                    FrmRefundChoose frmRefundChoose = new FrmRefundChoose(refundList);
+                    frmRefundChoose.ShowDialog();
+                }
+
                 list.Add(new DrugView(lek));
                 dataGridView2.DataSource = null;
                 dataGridView2.DataSource = list;
             }
             else
             {
-                MessageBox.Show("Osiągnięto maksymalną ilość pozycij na recepcie");
+                MessageBox.Show("Osiągnięto maksymalną ilość pozycji na recepcie");
             }
         }
 
@@ -84,9 +92,16 @@ namespace recepty
             Model1 model = new Model1();
             Doctor doctor = model.Doctor.FirstOrDefault();
             Lek[] drugList = DrugView.convertDrugViewToDrug(list);
-
-            Prescription prescription = new Prescription(PrescriptionNumber.getUnusedNumber("Rp"), patient, doctor, drugList);
-            prescription.insertToDb();
+            PrescriptionNumber prescriptionNumber = PrescriptionNumber.getUnusedNumber("Rp");
+            if (prescriptionNumber != null)
+            {
+                Prescription prescription = new Prescription(prescriptionNumber, patient, doctor, drugList);
+                prescription.insertToDb();
+            }
+            else
+            {
+                MessageBox.Show("Brak wolnych numerów recept!");
+            }
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -140,9 +155,27 @@ namespace recepty
             textBox9.Clear();
         }
 
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void dataGridView2_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            removeFromPrescription();
+        }
+
+        void removeFromPrescription()
+        {
+            try
+            {
+                string bl7 = (string)dataGridView2[0, dataGridView2.CurrentRow.Index].Value;
+                list.Remove(list.Single(p => p.BL7 == bl7));
+                dataGridView2.DataSource = null;
+                dataGridView2.DataSource = list;
+            }
+            catch (Exception)
+            { }
         }
     }
 }

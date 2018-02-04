@@ -16,6 +16,7 @@ namespace recepty
         public string BL7 { get; private set; }
         [ForeignKey("BL7")]
         public virtual Lek Lek { get; private set; }
+       // public int RefundacjaId { get; private set; }
 
         public PrescriptionItem()
         { }

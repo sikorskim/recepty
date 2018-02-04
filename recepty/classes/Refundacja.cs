@@ -14,11 +14,22 @@ namespace recepty
         public string Tekst { get; private set; }
         public Lek Lek { get; private set; }
 
+        Refundacja()
+        { }
+
         public Refundacja(string poziom, string tekst, Lek lek)
         {
             Poziom = poziom;
             Tekst = tekst;
             Lek = lek;
+        }
+
+        public static List<Refundacja> getRefunds(string bl7)
+        {
+            List<Refundacja> result = new List<Refundacja>();
+            Model1 model = new Model1();
+            result = model.Refundacja.Where(p => p.Lek.BL7 == bl7).ToList();
+            return result;
         }
     }
 }

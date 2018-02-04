@@ -172,25 +172,23 @@
     <Compile Include="classes\Gabinet.cs" />
     <Compile Include="classes\Lek.cs" />
     <Compile Include="classes\Doctor.cs" />
-    <Compile Include="Migrations\201801261710213_initial.cs" />
-    <Compile Include="Migrations\201801261710213_initial.Designer.cs">
-      <DependentUpon>201801261710213_initial.cs</DependentUpon>
+    <Compile Include="forms\FrmRefundChoose.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Migrations\201801261803315_migr0.cs" />
-    <Compile Include="Migrations\201801261803315_migr0.Designer.cs">
-      <DependentUpon>201801261803315_migr0.cs</DependentUpon>
+    <Compile Include="forms\FrmRefundChoose.Designer.cs">
+      <DependentUpon>FrmRefundChoose.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201801261944535_migr1.cs" />
-    <Compile Include="Migrations\201801261944535_migr1.Designer.cs">
-      <DependentUpon>201801261944535_migr1.cs</DependentUpon>
+    <Compile Include="Migrations\201802031916406_initial.cs" />
+    <Compile Include="Migrations\201802031916406_initial.Designer.cs">
+      <DependentUpon>201802031916406_initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201801262011129_migr2.cs" />
-    <Compile Include="Migrations\201801262011129_migr2.Designer.cs">
-      <DependentUpon>201801262011129_migr2.cs</DependentUpon>
+    <Compile Include="Migrations\201802032129088_migr0.cs" />
+    <Compile Include="Migrations\201802032129088_migr0.Designer.cs">
+      <DependentUpon>201802032129088_migr0.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201801262034264_migr3.cs" />
-    <Compile Include="Migrations\201801262034264_migr3.Designer.cs">
-      <DependentUpon>201801262034264_migr3.cs</DependentUpon>
+    <Compile Include="Migrations\201802040955328_migr1.cs" />
+    <Compile Include="Migrations\201802040955328_migr1.Designer.cs">
+      <DependentUpon>201802040955328_migr1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model1.cs" />
@@ -223,20 +221,17 @@
     <EmbeddedResource Include="forms\FrmSettings.resx">
       <DependentUpon>FrmSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201801261710213_initial.resx">
-      <DependentUpon>201801261710213_initial.cs</DependentUpon>
+    <EmbeddedResource Include="forms\FrmRefundChoose.resx">
+      <DependentUpon>FrmRefundChoose.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201801261803315_migr0.resx">
-      <DependentUpon>201801261803315_migr0.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201802031916406_initial.resx">
+      <DependentUpon>201802031916406_initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201801261944535_migr1.resx">
-      <DependentUpon>201801261944535_migr1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201802032129088_migr0.resx">
+      <DependentUpon>201802032129088_migr0.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201801262011129_migr2.resx">
-      <DependentUpon>201801262011129_migr2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201801262034264_migr3.resx">
-      <DependentUpon>201801262034264_migr3.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201802040955328_migr1.resx">
+      <DependentUpon>201802040955328_migr1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

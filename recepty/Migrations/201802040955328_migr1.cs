@@ -3,16 +3,16 @@ namespace recepty.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class migr0 : DbMigration
+    public partial class migr1 : DbMigration
     {
         public override void Up()
         {
-            AddColumn("dbo.Leks", "Active", c => c.Boolean(nullable: false));
+            DropColumn("dbo.PrescriptionItems", "RefundacjaId");
         }
         
         public override void Down()
         {
-            DropColumn("dbo.Leks", "Active");
+            AddColumn("dbo.PrescriptionItems", "RefundacjaId", c => c.Int(nullable: false));
         }
     }
 }

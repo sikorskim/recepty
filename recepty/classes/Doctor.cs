@@ -15,19 +15,21 @@ namespace recepty
         public string Name { get; private set; }
         public string PESEL { get; private set; }
         public string RightToPracticeNumber { get; private set; }
+        public string Title { get; private set; }
         public string Login { get; private set; }
         public string Password { get; private set; }
-        public virtual string FullName { get { return Name + " " + Lastname; } }
+        public virtual string FullName { get { return getFullName() ; } }
 
         public Doctor()
         { }
 
-        public Doctor(string lastname, string name, string pesel, string rightToPractice, string login, string password)
+        public Doctor(string lastname, string name, string pesel, string rightToPractice, string title, string login, string password)
         {
             Lastname = lastname;
             Name = name;
             PESEL = pesel;
             RightToPracticeNumber = rightToPractice;
+            Title = title;
             Login = login;
             Password = computeHash(password);
         }
@@ -86,6 +88,11 @@ namespace recepty
             }
 
             return sb.ToString();
+        }
+
+        string getFullName()
+        {
+            return Title + " " + Name + " " + Lastname;
         }
 
     }

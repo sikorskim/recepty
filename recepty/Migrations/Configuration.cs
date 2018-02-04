@@ -65,8 +65,11 @@ namespace recepty.Migrations
                 context.Uprawnienie.AddOrUpdate(upr);
             }
 
-            Doctor doctor = new Doctor("Lekarski", "Janusz", "90909898988", "012345", "lekarskij", "password");
+            Doctor doctor = new Doctor("Konowa³", "Janusz", "01234567890", "0123456", "lek. med.", "konowalj", "password");
             context.Doctor.AddOrUpdate(doctor);
+
+            //Refundacja refund = new Refundacja("X", "brak refundacji", null);
+            //context.Refundacja.AddOrUpdate(refund);
         }
     }
 }

@@ -87,24 +87,27 @@ namespace recepty
 
         public bool insertToDb()
         {
-            try
-            {
+            //try
+            //{
                 Model1 model = new Model1();
                 model.Prescription.Add(this);
                 List<PrescriptionItem> items = new List<PrescriptionItem>();
                 foreach (Lek lek in Leki)
                 {
+                if (lek != null)
+                {
                     items.Add(new PrescriptionItem(this, lek));
+                }
                 }
 
                 model.PrescriptionItem.AddRange(items);
                 model.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return false;
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //    return false;
+            //}
             return true;
         }
 

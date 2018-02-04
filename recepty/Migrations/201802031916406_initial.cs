@@ -40,6 +40,7 @@ namespace recepty.Migrations
                         Name = c.String(),
                         PESEL = c.String(),
                         RightToPracticeNumber = c.String(),
+                        Title = c.String(),
                         Login = c.String(),
                         Password = c.String(),
                     })
@@ -74,6 +75,7 @@ namespace recepty.Migrations
                         Postac = c.String(),
                         Dawka = c.String(),
                         Opakowanie = c.String(),
+                        Active = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.BL7);
             
@@ -96,6 +98,7 @@ namespace recepty.Migrations
                         PESEL = c.String(),
                         AddressId = c.Int(nullable: false),
                         Kod = c.String(maxLength: 128),
+                        Uprawnienie = c.String(),
                     })
                 .PrimaryKey(t => t.PatientId)
                 .ForeignKey("dbo.Addresses", t => t.AddressId, cascadeDelete: true)
@@ -149,6 +152,23 @@ namespace recepty.Migrations
                 .PrimaryKey(t => t.PulaReceptId);
             
             CreateTable(
+                "dbo.PrescriptionItems",
+                c => new
+                    {
+                        PrescriptionItemId = c.Int(nullable: false, identity: true),
+                        PrescriptionId = c.Int(nullable: false),
+                        BL7 = c.String(maxLength: 128),
+                        RefundacjaId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.PrescriptionItemId)
+                .ForeignKey("dbo.Leks", t => t.BL7)
+                .ForeignKey("dbo.Prescriptions", t => t.PrescriptionId, cascadeDelete: true)
+                .ForeignKey("dbo.Refundacjas", t => t.RefundacjaId, cascadeDelete: true)
+                .Index(t => t.PrescriptionId)
+                .Index(t => t.BL7)
+                .Index(t => t.RefundacjaId);
+            
+            CreateTable(
                 "dbo.Refundacjas",
                 c => new
                     {
@@ -161,11 +181,23 @@ namespace recepty.Migrations
                 .ForeignKey("dbo.Leks", t => t.Lek_BL7)
                 .Index(t => t.Lek_BL7);
             
+            CreateTable(
+                "dbo.Uprawnienies",
+                c => new
+                    {
+                        UprawnienieId = c.Int(nullable: false, identity: true),
+                        Kod = c.String(),
+                    })
+                .PrimaryKey(t => t.UprawnienieId);
+            
         }
         
         public override void Down()
         {
+            DropForeignKey("dbo.PrescriptionItems", "RefundacjaId", "dbo.Refundacjas");
             DropForeignKey("dbo.Refundacjas", "Lek_BL7", "dbo.Leks");
+            DropForeignKey("dbo.PrescriptionItems", "PrescriptionId", "dbo.Prescriptions");
+            DropForeignKey("dbo.PrescriptionItems", "BL7", "dbo.Leks");
             DropForeignKey("dbo.Prescriptions", "PrescriptionNumberId", "dbo.PrescriptionNumbers");
             DropForeignKey("dbo.PrescriptionNumbers", "PrescriptionList_PulaReceptId", "dbo.PulaRecepts");
             DropForeignKey("dbo.Prescriptions", "PatientId", "dbo.Patients");
@@ -174,6 +206,9 @@ namespace recepty.Migrations
             DropForeignKey("dbo.Patients", "AddressId", "dbo.Addresses");
             DropForeignKey("dbo.Gabinets", "Adres_AddressId", "dbo.Addresses");
             DropIndex("dbo.Refundacjas", new[] { "Lek_BL7" });
+            DropIndex("dbo.PrescriptionItems", new[] { "RefundacjaId" });
+            DropIndex("dbo.PrescriptionItems", new[] { "BL7" });
+            DropIndex("dbo.PrescriptionItems", new[] { "PrescriptionId" });
             DropIndex("dbo.PrescriptionNumbers", new[] { "PrescriptionList_PulaReceptId" });
             DropIndex("dbo.Prescriptions", new[] { "DoctorId" });
             DropIndex("dbo.Prescriptions", new[] { "PatientId" });
@@ -181,7 +216,9 @@ namespace recepty.Migrations
             DropIndex("dbo.Patients", new[] { "Kod" });
             DropIndex("dbo.Patients", new[] { "AddressId" });
             DropIndex("dbo.Gabinets", new[] { "Adres_AddressId" });
+            DropTable("dbo.Uprawnienies");
             DropTable("dbo.Refundacjas");
+            DropTable("dbo.PrescriptionItems");
             DropTable("dbo.PulaRecepts");
             DropTable("dbo.PrescriptionNumbers");
             DropTable("dbo.Prescriptions");

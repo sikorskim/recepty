@@ -49,12 +49,12 @@ namespace recepty
             try
             {
                 Model1 model = new Model1();
-                return model.PrescriptionNumber.Where(p => p.Used == false && p.PrescriptionList.Kategoria == category).FirstOrDefault();
+               PrescriptionNumber prescriptionNumber= model.PrescriptionNumber.Where(p => p.Used == false && p.PrescriptionList.Kategoria == category).FirstOrDefault();
+                setNumberUsed(prescriptionNumber);
+                return prescriptionNumber;
             }
             catch (Exception e)
             {
-                // lack of unused prescription numbers in category
-                Console.WriteLine(e);
                 return null;
             }
         }
